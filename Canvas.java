@@ -6,28 +6,50 @@ import java.awt.Graphics2D;
 import javax.swing.JPanel;
 
 public class Canvas extends JPanel{
-    final int truePixelSize = 8; //size of a pixel
-    final int scale = 3; //magnification factor(trust me this will be useful later)
-    final int pixelSize = truePixelSize * scale;//actual size of each individual "pixel"
-    final int gridSize = 32; //if this is n, the canvas is n x n "pixels"
-    final int canvasSize = pixelSize * gridSize;//actual size of canvas in px
+    int truePixelSize = 8; //size of a pixel
+    int scale = 3; //magnification factor(trust me this will be useful later)
+    int pixelSize = truePixelSize * scale;//actual size of each individual "pixel"
+    int gridSize = 32; //if this is n, the canvas is n x n "pixels"
+    int canvasSize = pixelSize * gridSize;//actual size of canvas in px
+
+    Color colors[][] = new Color[gridSize][gridSize];
 
 
     Canvas(){
         this.setPreferredSize(new Dimension(canvasSize,canvasSize));
-        this.setBackground(Color.lightGray);
+        newPixels();
+    }
+    public void newPixels(){
+        for(int i=0;i<gridSize;i++){
+            for(int j=0; j<gridSize;j++){
+                colors[i][j]=Color.lightGray;
+            }
+        }
     }
 
-    public void paint(Graphics g){
-        Graphics2D g2d = (Graphics2D) g;//casting graphics object to a graphics2d object
-        drawGrid(g2d);
+    public void paintComponent(Graphics g){
+        drawPixels(g);
+        drawGrid(g);
+        
     }
 
 
-    public void drawGrid(Graphics2D g2){
-        for(int i= 0; i<=canvasSize;i+=pixelSize){
-            g2.drawLine(i,0,i,canvasSize);
-            g2.drawLine(0,i,canvasSize, i);
+    public void drawGrid(Graphics g){
+        g.setColor(Color.black);
+        for(int i= 0; i<canvasSize;i+=pixelSize){
+            g.drawLine(i,0,i,canvasSize);
+            g.drawLine(0,i,canvasSize, i);
+        }
+    }
+
+    public void drawPixels(Graphics g){
+        colors[6][7]=Color.blue;
+        colors[7][7]=Color.blue;
+        for(int i=0; i < gridSize; i++){
+            for(int j=0; j< gridSize; j++){
+                g.setColor(colors[i][j]);
+                g.fillRect(i*pixelSize,j*pixelSize,pixelSize,pixelSize);
+            }
         }
     }
 }

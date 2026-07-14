@@ -66,7 +66,7 @@ public class Canvas extends JPanel implements MouseListener, MouseMotionListener
         int y=(int)(e.getY() / pixelSize);
         colors[x][y]=Color.green;
         if(last[0]!=x || last[1]!=y){ //this is why i need the last[]
-            System.out.print("hi");
+                                      //prevents unnecessary calling of repaint
             repaint(x*pixelSize,y*pixelSize,pixelSize,pixelSize);
             last[0]=x;last[1]=y;
         }

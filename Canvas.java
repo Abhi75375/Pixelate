@@ -2,11 +2,10 @@ import java.awt.event.*;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.MouseInfo;
 
 import javax.swing.JPanel;
 
-public class Canvas extends JPanel implements MouseListener{
+public class Canvas extends JPanel implements MouseListener, MouseMotionListener{
     int truePixelSize = 8; //size of a pixel
     int scale = 3; //magnification factor(trust me this will be useful later)
     int pixelSize = truePixelSize * scale;//actual size of each individual "pixel"
@@ -20,6 +19,7 @@ public class Canvas extends JPanel implements MouseListener{
         this.setPreferredSize(new Dimension(canvasSize,canvasSize));
         newPixels();
         this.addMouseListener(this);
+        this.addMouseMotionListener(this);
     }
     public void newPixels(){
         for(int i=0;i<gridSize;i++){
@@ -57,13 +57,17 @@ public class Canvas extends JPanel implements MouseListener{
         int x=(int)(e.getX() / pixelSize);
         int y=(int)(e.getY() / pixelSize);
         colors[x][y]=Color.green;
-        repaint();
+        repaint(x*pixelSize,y*pixelSize,pixelSize,pixelSize);
 	}
+    @Override
+    public void mouseDragged(MouseEvent e){
+        int x=(int)(e.getX() / pixelSize);
+        int y=(int)(e.getY() / pixelSize);
+        colors[x][y]=Color.green;
+        repaint(x*pixelSize,y*pixelSize,pixelSize,pixelSize);
+    }
 	@Override
-	public void mouseEntered(MouseEvent e) {
-	}
-	@Override
-	public void mouseExited(MouseEvent e) {
+	public void mouseMoved(MouseEvent e) {
 	}
 	@Override
 	public void mousePressed(MouseEvent e) {
@@ -71,4 +75,11 @@ public class Canvas extends JPanel implements MouseListener{
 	@Override
 	public void mouseReleased(MouseEvent e) {
 	}
+	@Override
+	public void mouseEntered(MouseEvent e) {
+	}
+	@Override
+	public void mouseExited(MouseEvent e) {
+	}
+    
 }

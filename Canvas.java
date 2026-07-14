@@ -13,6 +13,7 @@ public class Canvas extends JPanel implements MouseListener, MouseMotionListener
     int canvasSize = pixelSize * gridSize;//actual size of canvas in px
 
     Color colors[][] = new Color[gridSize][gridSize];
+    int last[]={-1,-1};// stores the last updated pixel while dragging
 
 
     Canvas(){
@@ -64,7 +65,11 @@ public class Canvas extends JPanel implements MouseListener, MouseMotionListener
         int x=(int)(e.getX() / pixelSize);
         int y=(int)(e.getY() / pixelSize);
         colors[x][y]=Color.green;
-        repaint(x*pixelSize,y*pixelSize,pixelSize,pixelSize);
+        if(last[0]!=x || last[1]!=y){ //this is why i need the last[]
+            System.out.print("hi");
+            repaint(x*pixelSize,y*pixelSize,pixelSize,pixelSize);
+            last[0]=x;last[1]=y;
+        }
     }
 	@Override
 	public void mouseMoved(MouseEvent e) {

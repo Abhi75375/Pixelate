@@ -36,6 +36,22 @@ public class Canvas extends JPanel implements MouseListener, MouseMotionListener
         
     }
 
+    public void drawPixels(Graphics g){
+        if(g.getClip().getBounds().getWidth()!=pixelSize){
+            for(int i=0; i < gridSize; i++){
+                for(int j=0; j< gridSize; j++){
+                    g.setColor(colors[i][j]);
+                    g.fillRect(i*pixelSize,j*pixelSize,pixelSize,pixelSize);
+                }
+            }
+        }
+        else{
+            int x = (int)g.getClip().getBounds().getX() / pixelSize;
+            int y = (int)g.getClip().getBounds().getY() / pixelSize;
+            g.setColor(colors[x][y]);
+            g.fillRect(x*pixelSize,y*pixelSize,pixelSize,pixelSize);
+        }
+    }
 
     public void drawGrid(Graphics g){
         g.setColor(Color.black);
@@ -45,14 +61,6 @@ public class Canvas extends JPanel implements MouseListener, MouseMotionListener
         }
     }
 
-    public void drawPixels(Graphics g){
-        for(int i=0; i < gridSize; i++){
-            for(int j=0; j< gridSize; j++){
-                g.setColor(colors[i][j]);
-                g.fillRect(i*pixelSize,j*pixelSize,pixelSize,pixelSize);
-            }
-        }
-    }
 	@Override
 	public void mouseClicked(MouseEvent e) {
         int x=(int)(e.getX() / pixelSize);

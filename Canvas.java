@@ -1,8 +1,7 @@
-import java.awt.event.*;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
-
+import java.awt.event.*;
 import javax.swing.JPanel;
 
 public class Canvas extends JPanel implements MouseListener, MouseMotionListener{
@@ -14,10 +13,16 @@ public class Canvas extends JPanel implements MouseListener, MouseMotionListener
 
     Color colors[][] = new Color[gridSize][gridSize];
     int last[]={-1,-1};// stores the last updated pixel while dragging
+    Statusbar statusbar;
 
+    Color currentColor = Color.black;   
+    public void setCurrentColor(Color color){
+        currentColor = color; 
+    }
 
-    Canvas(){
+    Canvas( Statusbar statusbar){
         this.setPreferredSize(new Dimension(canvasSize,canvasSize));
+        this.statusbar = statusbar;
         newPixels();
         this.addMouseListener(this);
         this.addMouseMotionListener(this);
@@ -29,8 +34,9 @@ public class Canvas extends JPanel implements MouseListener, MouseMotionListener
             }
         }
     }
-
+    @Override
     public void paintComponent(Graphics g){
+        super.paintComponent(g);                //A-- Clears the panel before drawing
         drawPixels(g);
         drawGrid(g);
         
@@ -65,14 +71,14 @@ public class Canvas extends JPanel implements MouseListener, MouseMotionListener
 	public void mouseClicked(MouseEvent e) {
         int x=(int)(e.getX() / pixelSize);
         int y=(int)(e.getY() / pixelSize);
-        colors[x][y]=Color.green;
+        colors[x][y]=currentColor;
         repaint(x*pixelSize,y*pixelSize,pixelSize,pixelSize);
 	}
     @Override
     public void mouseDragged(MouseEvent e){
         int x=(int)(e.getX() / pixelSize);
         int y=(int)(e.getY() / pixelSize);
-        colors[x][y]=Color.green;
+        colors[x][y]=currentColor;
         if(last[0]!=x || last[1]!=y){ //this is why i need the last[]
                                       //prevents unnecessary calling of repaint
             repaint(x*pixelSize,y*pixelSize,pixelSize,pixelSize);
@@ -80,7 +86,10 @@ public class Canvas extends JPanel implements MouseListener, MouseMotionListener
         }
     }
 	@Override
-	public void mouseMoved(MouseEvent e) {
+	public void mouseMoved(MouseEvent e) {            
+        int x = e.getX() / pixelSize;
+        int y = e.getY() / pixelSize;
+        statusbar.updateStatus(x,y,currentColor);       //A-- Statusbar gets values
 	}
 	@Override
 	public void mousePressed(MouseEvent e) {

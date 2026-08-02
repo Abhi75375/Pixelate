@@ -1,0 +1,6 @@
+/**
+ * Color
+ */
+public class Color {
+
+}

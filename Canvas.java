@@ -25,7 +25,7 @@ public class Canvas extends JPanel implements MouseListener, MouseMotionListener
     public void newPixels(){
         for(int i=0;i<gridSize;i++){
             for(int j=0; j<gridSize;j++){
-                colors[i][j]=Color.lightGray;
+                colors[i][j]=null;
             }
         }
     }
@@ -40,7 +40,7 @@ public class Canvas extends JPanel implements MouseListener, MouseMotionListener
         if(g.getClip().getBounds().getWidth()!=pixelSize){
             for(int i=0; i < gridSize; i++){
                 for(int j=0; j< gridSize; j++){
-                    g.setColor(colors[i][j]);
+                    g.setColor(Color.lightGray);
                     g.fillRect(i*pixelSize,j*pixelSize,pixelSize,pixelSize);
                 }
             }

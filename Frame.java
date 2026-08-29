@@ -1,4 +1,5 @@
-import javax.swing.JFrame;
+
+import javax.swing.*;
 public class Frame extends JFrame{
     static final int WIDTH = 1600;
     static final int HEIGHT = 900;
@@ -12,8 +13,9 @@ public class Frame extends JFrame{
 
         //adding panels
         Canvas canvas = new Canvas();
-        this.add(canvas);
+        JScrollPane scrollpane = new JScrollPane(canvas);
 
+        this.add(scrollpane);   
         this.setVisible(true);
     }
 }

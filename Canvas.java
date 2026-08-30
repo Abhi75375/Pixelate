@@ -4,7 +4,7 @@ import java.awt.Graphics;
 import java.awt.Dimension;
 import javax.swing.JPanel;
 
-public class Canvas extends JPanel implements KeyListener,MouseListener, MouseMotionListener{
+public class Canvas extends JPanel implements KeyListener,MouseListener, MouseMotionListener, MouseWheelListener{
     int truePixelSize = 8; //size of a pixel
     int scale = 3; //magnification factor(trust me this will be useful later)
     int pixelSize = truePixelSize * scale;//actual size of each individual "pixel"
@@ -21,6 +21,7 @@ public class Canvas extends JPanel implements KeyListener,MouseListener, MouseMo
         newPixels();
         this.addMouseListener(this);
         this.addMouseMotionListener(this);
+        this.addMouseWheelListener(this);
         this.addKeyListener(this);
         this.setFocusable(true);
     }
@@ -61,7 +62,7 @@ public class Canvas extends JPanel implements KeyListener,MouseListener, MouseMo
 
     public void drawGrid(Graphics g){
         g.setColor(Color.black);
-        for(int i= 0; i<canvasSize;i+=pixelSize){
+        for(int i= 0; i<=canvasSize;i+=pixelSize){
             g.drawLine(i,0,i,canvasSize);
             g.drawLine(0,i,canvasSize, i);
         }
@@ -87,9 +88,10 @@ public class Canvas extends JPanel implements KeyListener,MouseListener, MouseMo
         }
         
         if(e.getKeyCode()==KeyEvent.VK_MINUS){ //and - for zoom out
-            if(scale>1)
+            if(scale>1){
                 scale--;
-            resizeCanvas();
+                resizeCanvas();
+            }
         }
     }
 
@@ -109,7 +111,7 @@ public class Canvas extends JPanel implements KeyListener,MouseListener, MouseMo
         int y=(int)(e.getY() / pixelSize);
         
         //out of bounds fix
-        if(x>=gridSize||y>=gridSize)
+        if(x>=gridSize||x<0||y>=gridSize||y<0)
             return;
 
         colors[x][y]=currentColor;
@@ -121,7 +123,7 @@ public class Canvas extends JPanel implements KeyListener,MouseListener, MouseMo
         int y=(int)(e.getY() / pixelSize);
 
         //out of bounds fix
-        if(x>=gridSize||y>=gridSize)
+        if(x>=gridSize||x<0||y>=gridSize||y<0)
             return;
 
         colors[x][y]=currentColor;
@@ -146,5 +148,19 @@ public class Canvas extends JPanel implements KeyListener,MouseListener, MouseMo
 	@Override
 	public void mouseExited(MouseEvent e) {
 	}
+
+    @Override
+    public void mouseWheelMoved(MouseWheelEvent e){
+        if(e.getWheelRotation()<0){
+            if(scale>1){
+                scale--;
+                resizeCanvas();
+            }
+        }
+        else{
+            scale++;
+            resizeCanvas();
+        }
+    }
     
 }

@@ -1,7 +1,7 @@
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.event.*;
+import java.awt.event.*;           
 import javax.swing.JPanel;
 
 public class Canvas extends JPanel implements MouseListener, MouseMotionListener{
@@ -13,16 +13,18 @@ public class Canvas extends JPanel implements MouseListener, MouseMotionListener
 
     Color colors[][] = new Color[gridSize][gridSize];
     int last[]={-1,-1};// stores the last updated pixel while dragging
-    Statusbar statusbar;
+    
 
     Color currentColor = Color.black;   
     public void setCurrentColor(Color color){
         currentColor = color; 
     }
+    public Color getCurrentColor(){
+        return currentColor;
+    }
 
-    Canvas( Statusbar statusbar){
+    Canvas(){
         this.setPreferredSize(new Dimension(canvasSize,canvasSize));
-        this.statusbar = statusbar;
         newPixels();
         this.addMouseListener(this);
         this.addMouseMotionListener(this);
@@ -86,11 +88,10 @@ public class Canvas extends JPanel implements MouseListener, MouseMotionListener
         }
     }
 	@Override
-	public void mouseMoved(MouseEvent e) {            
-        int x = e.getX() / pixelSize;
-        int y = e.getY() / pixelSize;
-        statusbar.updateStatus(x,y,currentColor);       //A-- Statusbar gets values
-	}
+	public void mouseMoved(MouseEvent e) {         
+        }
+    
+	
 	@Override
 	public void mousePressed(MouseEvent e) {
 	}

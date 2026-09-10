@@ -12,12 +12,14 @@ public class Frame extends JFrame{
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         //adding panels
-        Statusbar statusbar = new Statusbar();
+      
+
+        Canvas canvas = new Canvas();              //passing reference of statusbar to canvas
+        this.add(canvas , BorderLayout.CENTER);
+
+        Statusbar statusbar = new Statusbar(canvas);
         this.add(statusbar, BorderLayout.SOUTH);
-
-        Canvas canvas = new Canvas(statusbar);              //passing reference of statusbar to canvas
-        this.add(canvas, BorderLayout.CENTER);
-
+        
         Menubar menubar = new Menubar();
         this.add(menubar, BorderLayout.NORTH);
 

@@ -8,5 +8,5 @@
  * its declared outside frame, it doesnt need to access frame directly
  */
 interface ZoomListener{
-    void zoomRequested(int mouseX,int mouseY,int rotation);
+    void zoomRequested(int rotation);
 }

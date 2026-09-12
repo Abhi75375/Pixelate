@@ -1,5 +1,8 @@
 import javax.swing.*;
+import java.awt.BorderLayout;
+
 public class Frame extends JFrame implements ZoomListener{
+
     static final int WIDTH = 1600;
     static final int HEIGHT = 900;
     Canvas canvas;
@@ -13,11 +16,27 @@ public class Frame extends JFrame implements ZoomListener{
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         canvas = new Canvas();
+        this.add(canvas , BorderLayout.CENTER);
+
         scrollpane = new JScrollPane(canvas);
         this.add(scrollpane);   
+
         canvas.setZoomListener(this);
 
+
+        Statusbar statusbar = new Statusbar(canvas);
+        this.add(statusbar, BorderLayout.SOUTH);
+        
+        Menubar menubar = new Menubar();
+        this.add(menubar, BorderLayout.NORTH);
+
+        Ribbon ribbon = new Ribbon(canvas);
+        this.add(ribbon,BorderLayout.WEST);
+       
+
         this.setVisible(true);
+        
+
     }
     @Override
     public void zoomRequested(int rotation) {

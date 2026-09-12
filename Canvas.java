@@ -1,7 +1,7 @@
-import java.awt.event.*;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Dimension;
+import java.awt.event.*;           
 import javax.swing.JPanel;
 
 public class Canvas extends JPanel implements KeyListener,MouseListener, MouseMotionListener, MouseWheelListener{
@@ -11,12 +11,19 @@ public class Canvas extends JPanel implements KeyListener,MouseListener, MouseMo
     int gridSize = 32; //if this is n, the canvas is n x n "pixels"
     int canvasSize = pixelSize * gridSize;//actual size of canvas in px
 
-    Color currentColor = Color.green;
     Color colors[][] = new Color[gridSize][gridSize];
     int last[]={-1,-1};// stores the last updated pixel while dragging
+    
 
     ZoomListener zoomListener;
 
+    Color currentColor = Color.black;   
+    public void setCurrentColor(Color color){
+        currentColor = color; 
+    }
+    public Color getCurrentColor(){
+        return currentColor;
+    }
 
     Canvas(){
         this.setPreferredSize(new Dimension(canvasSize,canvasSize));
@@ -35,9 +42,9 @@ public class Canvas extends JPanel implements KeyListener,MouseListener, MouseMo
             }
         }
     }
-
+    @Override
     public void paintComponent(Graphics g){
-        super.paintComponent(g);
+        super.paintComponent(g);                //A-- Clears the panel before drawing
         drawPixels(g);
         drawGrid(g);
         
@@ -142,8 +149,10 @@ public class Canvas extends JPanel implements KeyListener,MouseListener, MouseMo
         }
     }
 	@Override
-	public void mouseMoved(MouseEvent e) {
-	}
+	public void mouseMoved(MouseEvent e) {         
+        }
+    
+	
 	@Override
 	public void mousePressed(MouseEvent e) {
 	}

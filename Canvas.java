@@ -6,8 +6,8 @@ import javax.swing.JPanel;
 
 public class Canvas extends JPanel implements KeyListener,MouseListener, MouseMotionListener, MouseWheelListener{
     int truePixelSize = 8; //size of a pixel
-    int scale = 3; //magnification factor(trust me this will be useful later)
-    int pixelSize = truePixelSize * scale;//actual size of each individual "pixel"
+    float scale = 3; //magnification factor(trust me this will be useful later)
+    int pixelSize = (int)(truePixelSize * scale);//actual size of each individual "pixel"
     int gridSize = 32; //if this is n, the canvas is n x n "pixels"
     int canvasSize = pixelSize * gridSize;//actual size of canvas in px
 
@@ -72,7 +72,7 @@ public class Canvas extends JPanel implements KeyListener,MouseListener, MouseMo
     }
 
     public void resizeCanvas(){
-        pixelSize = truePixelSize * scale;
+        pixelSize = (int)(truePixelSize * scale);
         canvasSize = gridSize * pixelSize;
         setPreferredSize(new Dimension(canvasSize,canvasSize));
         revalidate();
@@ -91,13 +91,13 @@ public class Canvas extends JPanel implements KeyListener,MouseListener, MouseMo
     @Override
     public void keyPressed(KeyEvent e){
         if(e.getKeyCode()==KeyEvent.VK_EQUALS){ //for now press + for zoom in
-            scale++;
+            scale+=0.1;
             resizeCanvas();
         }
         
         if(e.getKeyCode()==KeyEvent.VK_MINUS){ //and - for zoom out
-            if(scale>1){
-                scale--;
+            if(scale>0.1){
+                scale-=0.1;
                 resizeCanvas();
             }
         }
@@ -159,7 +159,7 @@ public class Canvas extends JPanel implements KeyListener,MouseListener, MouseMo
 
     @Override
     public void mouseWheelMoved(MouseWheelEvent e){
-        zoomListener.zoomRequested(e.getX(),e.getY(),e.getWheelRotation());
+        zoomListener.zoomRequested(e.getWheelRotation());
     }
     
 }

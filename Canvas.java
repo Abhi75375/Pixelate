@@ -15,6 +15,8 @@ public class Canvas extends JPanel implements KeyListener,MouseListener, MouseMo
     Color colors[][] = new Color[gridSize][gridSize];
     int last[]={-1,-1};// stores the last updated pixel while dragging
 
+    ZoomListener zoomListener;
+
 
     Canvas(){
         this.setPreferredSize(new Dimension(canvasSize,canvasSize));
@@ -24,6 +26,7 @@ public class Canvas extends JPanel implements KeyListener,MouseListener, MouseMo
         this.addMouseWheelListener(this);
         this.addKeyListener(this);
         this.setFocusable(true);
+
     }
     public void newPixels(){
         for(int i=0;i<gridSize;i++){
@@ -75,10 +78,15 @@ public class Canvas extends JPanel implements KeyListener,MouseListener, MouseMo
         revalidate();
         repaint();
     }
+    
 
 
 
     //Event Listener Methods
+
+    public void setZoomListener(ZoomListener listener){
+        zoomListener = listener;//frame
+    }
 
     @Override
     public void keyPressed(KeyEvent e){
@@ -151,16 +159,7 @@ public class Canvas extends JPanel implements KeyListener,MouseListener, MouseMo
 
     @Override
     public void mouseWheelMoved(MouseWheelEvent e){
-        if(e.getWheelRotation()<0){
-            if(scale>1){
-                scale--;
-                resizeCanvas();
-            }
-        }
-        else{
-            scale++;
-            resizeCanvas();
-        }
+        zoomListener.zoomRequested(e.getX(),e.getY(),e.getWheelRotation());
     }
     
 }

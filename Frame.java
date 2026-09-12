@@ -23,16 +23,15 @@ public class Frame extends JFrame implements ZoomListener{
     public void zoomRequested(int rotation) {
         int oldX = canvas.getMousePosition().x / canvas.pixelSize;
         int oldY = canvas.getMousePosition().y / canvas.pixelSize;
-        if(rotation > 0){
+        if(rotation > 0)
             canvas.scale+=0.1;
-            canvas.resizeCanvas();
-        }
-        else{
-            if(canvas.scale > 0.1){
+        
+        else
+            if(canvas.scale > 1)
                 canvas.scale-=0.1;
-                canvas.resizeCanvas();
-            }
-        }
+        
+        canvas.resizeCanvas();
+
         int newX = canvas.getMousePosition().x / canvas.pixelSize;
         int newY = canvas.getMousePosition().y / canvas.pixelSize;
 

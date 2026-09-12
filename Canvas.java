@@ -96,7 +96,7 @@ public class Canvas extends JPanel implements KeyListener,MouseListener, MouseMo
         }
         
         if(e.getKeyCode()==KeyEvent.VK_MINUS){ //and - for zoom out
-            if(scale>0.1){
+            if(scale>1){
                 scale-=0.1;
                 resizeCanvas();
             }
@@ -115,8 +115,8 @@ public class Canvas extends JPanel implements KeyListener,MouseListener, MouseMo
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
-        int x=(int)(e.getX() / pixelSize);
-        int y=(int)(e.getY() / pixelSize);
+        int x= e.getX() / pixelSize;
+        int y= e.getY() / pixelSize;
         
         //out of bounds fix
         if(x>=gridSize||x<0||y>=gridSize||y<0)
@@ -127,8 +127,8 @@ public class Canvas extends JPanel implements KeyListener,MouseListener, MouseMo
 	}
     @Override
     public void mouseDragged(MouseEvent e){
-        int x=(int)(e.getX() / pixelSize);
-        int y=(int)(e.getY() / pixelSize);
+        int x= e.getX() / pixelSize;
+        int y= e.getY() / pixelSize;
 
         //out of bounds fix
         if(x>=gridSize||x<0||y>=gridSize||y<0)

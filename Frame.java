@@ -1,5 +1,8 @@
 import javax.swing.*;
 import java.awt.BorderLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
 
 public class Frame extends JFrame implements ZoomListener{
 
@@ -21,9 +24,6 @@ public class Frame extends JFrame implements ZoomListener{
         scrollpane = new JScrollPane(canvas);
         this.add(scrollpane);   
 
-        canvas.setZoomListener(this);
-
-
         Statusbar statusbar = new Statusbar(canvas);
         this.add(statusbar, BorderLayout.SOUTH);
         
@@ -32,7 +32,31 @@ public class Frame extends JFrame implements ZoomListener{
 
         Ribbon ribbon = new Ribbon(canvas);
         this.add(ribbon,BorderLayout.WEST);
-       
+
+        canvas.setZoomListener(this);
+
+        KeyBindings.bind(
+                canvas,
+                KeyEvent.VK_EQUALS,InputEvent.CTRL_DOWN_MASK,
+                "zoomIn",
+                new AbstractAction(){
+                    @Override 
+                    public void actionPerformed(ActionEvent e){
+                        canvas.zoomIn();
+                    }
+                }
+        );
+        KeyBindings.bind(
+                canvas,
+                KeyEvent.VK_MINUS,InputEvent.CTRL_DOWN_MASK,
+                "zoomOut",
+                new AbstractAction(){
+                    @Override 
+                    public void actionPerformed(ActionEvent e){
+                        canvas.zoomOut();
+                    }
+                }
+        );
 
         this.setVisible(true);
         

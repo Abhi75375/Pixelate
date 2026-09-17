@@ -4,11 +4,11 @@ import java.awt.Dimension;
 import java.awt.event.*;           
 import javax.swing.JPanel;
 
-public class Canvas extends JPanel implements KeyListener,MouseListener, MouseMotionListener, MouseWheelListener{
+public class Canvas extends JPanel implements MouseListener, MouseMotionListener, MouseWheelListener{
     int truePixelSize = 8; //size of a pixel
     float scale = 3; //magnification factor(trust me this will be useful later)
     int pixelSize = (int)(truePixelSize * scale);//actual size of each individual "pixel"
-    int gridSize = 32; //if this is n, the canvas is n x n "pixels"
+    int gridSize = 64; //if this is n, the canvas is n x n "pixels"
     int canvasSize = pixelSize * gridSize;//actual size of canvas in px
 
     Color colors[][] = new Color[gridSize][gridSize];
@@ -27,12 +27,12 @@ public class Canvas extends JPanel implements KeyListener,MouseListener, MouseMo
 
     Canvas(){
         this.setPreferredSize(new Dimension(canvasSize,canvasSize));
-        newPixels();
+        this.setFocusable(true);
+        //this.addKeyListener(this);
         this.addMouseListener(this);
         this.addMouseMotionListener(this);
         this.addMouseWheelListener(this);
-        this.addKeyListener(this);
-        this.setFocusable(true);
+        newPixels();
 
     }
     public void newPixels(){
@@ -85,6 +85,16 @@ public class Canvas extends JPanel implements KeyListener,MouseListener, MouseMo
         revalidate();
         repaint();
     }
+    public void zoomIn(){
+        scale += 0.1;
+        resizeCanvas();
+    }
+    public void zoomOut(){
+        if(scale > 1){
+            scale -= 0.1;
+            resizeCanvas();
+        }
+    }
     
 
 
@@ -93,31 +103,6 @@ public class Canvas extends JPanel implements KeyListener,MouseListener, MouseMo
 
     public void setZoomListener(ZoomListener listener){
         zoomListener = listener;//frame
-    }
-
-    @Override
-    public void keyPressed(KeyEvent e){
-        if(e.getKeyCode()==KeyEvent.VK_EQUALS){ //for now press + for zoom in
-            scale+=0.1;
-            resizeCanvas();
-        }
-        
-        if(e.getKeyCode()==KeyEvent.VK_MINUS){ //and - for zoom out
-            if(scale>1){
-                scale-=0.1;
-                resizeCanvas();
-            }
-        }
-    }
-
-    @Override
-    public void keyReleased(KeyEvent e){
-        //idk
-    }
-
-    @Override
-    public void keyTyped(KeyEvent e){
-        //idk
     }
 
 	@Override
@@ -150,7 +135,7 @@ public class Canvas extends JPanel implements KeyListener,MouseListener, MouseMo
     }
 	@Override
 	public void mouseMoved(MouseEvent e) {         
-        }
+    }    
     
 	
 	@Override

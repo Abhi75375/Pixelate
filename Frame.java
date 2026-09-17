@@ -34,7 +34,14 @@ public class Frame extends JFrame implements ZoomListener{
         this.add(ribbon,BorderLayout.WEST);
 
         canvas.setZoomListener(this);
+        setupKeyBindings();
 
+
+        this.setVisible(true);
+    }
+    void setupKeyBindings(){
+        
+        //ctrl +  zoom in
         KeyBindings.bind(
                 canvas,
                 KeyEvent.VK_EQUALS,InputEvent.CTRL_DOWN_MASK,
@@ -46,6 +53,7 @@ public class Frame extends JFrame implements ZoomListener{
                     }
                 }
         );
+        //ctrl -  zoom out
         KeyBindings.bind(
                 canvas,
                 KeyEvent.VK_MINUS,InputEvent.CTRL_DOWN_MASK,
@@ -57,9 +65,6 @@ public class Frame extends JFrame implements ZoomListener{
                     }
                 }
         );
-
-        this.setVisible(true);
-        
 
     }
     @Override

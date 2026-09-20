@@ -1,7 +1,7 @@
 import java.awt.Color;
-import java.awt.Graphics;
 import java.awt.Dimension;
-import java.awt.event.*;           
+import java.awt.Graphics;           
+import java.awt.event.*;
 import javax.swing.JPanel;
 
 public class Canvas extends JPanel implements KeyListener,MouseListener, MouseMotionListener, MouseWheelListener{
@@ -18,12 +18,12 @@ public class Canvas extends JPanel implements KeyListener,MouseListener, MouseMo
     ZoomListener zoomListener;
 
     Color currentColor = Color.black;   
-    public void setCurrentColor(Color color){
-        currentColor = color; 
-    }
-    public Color getCurrentColor(){
-        return currentColor;
-    }
+    public void setCurrentColor(Color color){currentColor = color;}
+    public Color getCurrentColor(){return currentColor;}
+
+    public boolean colorPicker = false;
+    public boolean checkPickerOn(){if(colorPicker){return true;}else{return false;}}
+    public void setPickerOn(){if(colorPicker){colorPicker = false;} else{colorPicker = true;}}
 
     Canvas(){
         this.setPreferredSize(new Dimension(canvasSize,canvasSize));
@@ -128,7 +128,13 @@ public class Canvas extends JPanel implements KeyListener,MouseListener, MouseMo
         //out of bounds fix
         if(x>=gridSize||x<0||y>=gridSize||y<0)
             return;
-
+        if(checkPickerOn()){
+                if(colors[x][y] == null){setCurrentColor(Color.lightGray);}
+                else{setCurrentColor(colors[x][y]);}
+                
+                setPickerOn();
+        }
+        
         colors[x][y]=currentColor;
         repaint(x*pixelSize,y*pixelSize,pixelSize,pixelSize);
 	}

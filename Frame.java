@@ -30,8 +30,8 @@ public class Frame extends JFrame implements ZoomListener{
         Menubar menubar = new Menubar();
         this.add(menubar, BorderLayout.NORTH);
 
-        Ribbon ribbon = new Ribbon(canvas);
-        this.add(ribbon,BorderLayout.WEST);
+        Sidebar sidebar = new Sidebar(canvas);
+        this.add(sidebar,BorderLayout.WEST);
        
 
         this.setVisible(true);

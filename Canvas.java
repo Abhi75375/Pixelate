@@ -16,14 +16,24 @@ public class Canvas extends JPanel implements KeyListener,MouseListener, MouseMo
     
 
     ZoomListener zoomListener;
-
+//Color
     Color currentColor = Color.black;   
     public void setCurrentColor(Color color){currentColor = color;}
     public Color getCurrentColor(){return currentColor;}
-
+//ColorPicker
     public boolean colorPicker = false;
     public boolean checkPickerOn(){if(colorPicker){return true;}else{return false;}}
     public void setPickerOn(){if(colorPicker){colorPicker = false;} else{colorPicker = true;}}
+//FillBucket
+    public boolean fillBucket = false;
+    public boolean checkFillBucket(){if(fillBucket){return true;}else{return false;}}
+    public void setFillBucket(){if(fillBucket){fillBucket =false;}else{fillBucket = true;}}
+    public boolean ColorCompare(Color color1,Color color2){
+        if(color1 == null){color1 =new Color(192, 192, 192);}
+        if(color2 == null){color2 =new Color(192, 192, 192);}
+        if(color1.equals(color2)){return true;}
+        else{return false;}
+    }
 
     Canvas(){
         this.setPreferredSize(new Dimension(canvasSize,canvasSize));
@@ -55,7 +65,7 @@ public class Canvas extends JPanel implements KeyListener,MouseListener, MouseMo
             for(int i=0; i < gridSize; i++){
                 for(int j=0; j< gridSize; j++){
                     if(colors[i][j]==null)
-                        g.setColor(Color.lightGray);
+                        g.setColor(new Color(192, 192, 192));
                     else
                         g.setColor(colors[i][j]);
                     g.fillRect(i*pixelSize,j*pixelSize,pixelSize,pixelSize);
@@ -86,7 +96,7 @@ public class Canvas extends JPanel implements KeyListener,MouseListener, MouseMo
         repaint();
     }
     
-
+    
 
 
     //Event Listener Methods
@@ -128,16 +138,42 @@ public class Canvas extends JPanel implements KeyListener,MouseListener, MouseMo
         //out of bounds fix
         if(x>=gridSize||x<0||y>=gridSize||y<0)
             return;
-        if(checkPickerOn()){
-                if(colors[x][y] == null){setCurrentColor(Color.lightGray);}
+        //ColorPicker working
+        if(checkPickerOn()){                                   
+                if(colors[x][y] == null){setCurrentColor(new Color(192, 192, 192));}
                 else{setCurrentColor(colors[x][y]);}
                 
                 setPickerOn();
         }
-        
+        //Fill Bucket working
+        if(checkFillBucket()){
+            if(getCurrentColor().equals(colors[x][y])){return;}
+            else{
+                runFillBucket(x, y, colors[x][y]);
+                setFillBucket();
+                repaint();
+                return;
+            }
+        }
         colors[x][y]=currentColor;
         repaint(x*pixelSize,y*pixelSize,pixelSize,pixelSize);
 	}
+    public void runFillBucket(int x,int y,Color originalColor){
+        colors[x][y] = getCurrentColor(); 
+
+        if( y-1 >= 0 && ColorCompare(colors[x][y-1],originalColor) ) 
+            runFillBucket(x, y-1,originalColor);
+
+        if( y+1 < gridSize && ColorCompare(colors[x][y+1],originalColor) )
+            runFillBucket(x, y+1,originalColor);
+
+      if( x-1 >= 0 && ColorCompare(colors[x-1][y],originalColor) )
+            runFillBucket(x-1, y,originalColor);
+
+        if( x+1 < gridSize && ColorCompare(colors[x+1][y],originalColor) )
+            runFillBucket(x+1, y,originalColor);
+    }
+
     @Override
     public void mouseDragged(MouseEvent e){
         int x= e.getX() / pixelSize;

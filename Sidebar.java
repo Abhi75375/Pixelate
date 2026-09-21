@@ -29,10 +29,11 @@ public class Sidebar extends JPanel{
         JButton EditColorButton = new JButton("Edit Colors");
         JButton ColorPickerButton = new JButton("🖊");
         JButton EraseButton = new JButton("🩹");
+        JButton FillBucketButton = new JButton("Fill Bucket");
         JLabel dashLabel = new JLabel("******************");
         
-        add(EditColorButton);
-        add(ColorPickerButton); add(EraseButton);
+        add(EditColorButton);add(ColorPickerButton);
+        add(EraseButton);add(FillBucketButton);
         add(dashLabel);
         add(createColorButton(new Color(255, 0, 0)));
         add(createColorButton(new Color(0,255,0)));
@@ -52,7 +53,10 @@ public class Sidebar extends JPanel{
           Color color = JColorChooser.showDialog(canvas,"Choose a color:", canvas.getCurrentColor());
           canvas.setCurrentColor(color);
         });
-        //saveButton.addActionListener(new ActionListener(){});
+        FillBucketButton.addActionListener(e->{
+          canvas.setFillBucket();System.out.println(canvas.checkFillBucket());
+        });
         
       }
+
 }

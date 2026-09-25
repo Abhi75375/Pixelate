@@ -66,6 +66,33 @@ public class Frame extends JFrame implements ZoomListener{
                 }
         );
 
+        //ctrl z - undo
+        KeyBindings.bind(
+                canvas,
+                KeyEvent.VK_Z,InputEvent.CTRL_DOWN_MASK,
+                "undo",
+                new AbstractAction(){
+                    @Override 
+                    public void actionPerformed(ActionEvent e){
+                        //undo
+                        canvas.doUndo();
+                    }
+                }
+        );
+        //ctrl y - redo
+        KeyBindings.bind(
+                canvas,
+                KeyEvent.VK_Y,InputEvent.CTRL_DOWN_MASK,
+                "redo",
+                new AbstractAction(){
+                    @Override 
+                    public void actionPerformed(ActionEvent e){
+                        //redo
+                        canvas.doRedo();
+                    }
+                }
+        );
+
     }
     @Override
     public void zoomRequested(int rotation) {

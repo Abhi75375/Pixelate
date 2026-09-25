@@ -33,6 +33,7 @@ public class Canvas extends JPanel implements MouseListener, MouseMotionListener
         this.addMouseMotionListener(this);
         this.addMouseWheelListener(this);
         newPixels();
+        History.init(gridSize);
 
     }
     public void newPixels(){
@@ -90,10 +91,18 @@ public class Canvas extends JPanel implements MouseListener, MouseMotionListener
         resizeCanvas();
     }
     public void zoomOut(){
-        if(scale > 1){
+        if(scale > 0.5){
             scale -= 0.1;
             resizeCanvas();
         }
+    }
+    public void doUndo(){
+        History.undo(colors);
+        repaint();
+    }
+    public void doRedo(){
+        History.redo(colors);
+        repaint();
     }
     
 
@@ -114,8 +123,10 @@ public class Canvas extends JPanel implements MouseListener, MouseMotionListener
         if(x>=gridSize||x<0||y>=gridSize||y<0)
             return;
 
+        //History.canvasBeforeChange(colors);
         colors[x][y]=currentColor;
         repaint(x*pixelSize,y*pixelSize,pixelSize,pixelSize);
+        //History.canvasAfterChange(colors);
 	}
     @Override
     public void mouseDragged(MouseEvent e){
@@ -140,6 +151,7 @@ public class Canvas extends JPanel implements MouseListener, MouseMotionListener
 	
 	@Override
 	public void mousePressed(MouseEvent e) {
+        History.canvasGonnaChange(colors);
 	}
 	@Override
 	public void mouseReleased(MouseEvent e) {

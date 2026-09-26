@@ -1,3 +1,3 @@
-public class Ribbon{
+public class Ribbon {
 
 }

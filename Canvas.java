@@ -4,11 +4,11 @@ import java.awt.Graphics;
 import java.awt.event.*;
 import javax.swing.JPanel;
 
-public class Canvas extends JPanel implements KeyListener,MouseListener, MouseMotionListener, MouseWheelListener{
+public class Canvas extends JPanel implements MouseListener, MouseMotionListener, MouseWheelListener{
     int truePixelSize = 8; //size of a pixel
     float scale = 3; //magnification factor(trust me this will be useful later)
     int pixelSize = (int)(truePixelSize * scale);//actual size of each individual "pixel"
-    int gridSize = 32; //if this is n, the canvas is n x n "pixels"
+    int gridSize = 64; //if this is n, the canvas is n x n "pixels"
     int canvasSize = pixelSize * gridSize;//actual size of canvas in px
 
     Color colors[][] = new Color[gridSize][gridSize];
@@ -22,27 +22,52 @@ public class Canvas extends JPanel implements KeyListener,MouseListener, MouseMo
     public Color getCurrentColor(){return currentColor;}
 //ColorPicker
     public boolean colorPicker = false;
-    public boolean checkPickerOn(){if(colorPicker){return true;}else{return false;}}
-    public void setPickerOn(){if(colorPicker){colorPicker = false;} else{colorPicker = true;}}
+    public boolean checkPickerOn(){
+        if(colorPicker)
+            return true;
+        else
+            return false;
+    }
+    public void setPickerOn(){
+        if(colorPicker)
+            colorPicker = false; 
+        else
+            colorPicker = true;
+    }
 //FillBucket
     public boolean fillBucket = false;
-    public boolean checkFillBucket(){if(fillBucket){return true;}else{return false;}}
-    public void setFillBucket(){if(fillBucket){fillBucket =false;}else{fillBucket = true;}}
+    public boolean checkFillBucket(){
+        if(fillBucket)
+            return true;
+        else
+            return false;
+    }
+    public void setFillBucket(){
+        if(fillBucket)
+            fillBucket =false;
+        else
+            fillBucket = true;
+    }
     public boolean ColorCompare(Color color1,Color color2){
-        if(color1 == null){color1 =new Color(192, 192, 192);}
-        if(color2 == null){color2 =new Color(192, 192, 192);}
-        if(color1.equals(color2)){return true;}
-        else{return false;}
+        if(color1 == null)
+            color1 =new Color(192, 192, 192);
+        if(color2 == null)
+            color2 =new Color(192, 192, 192);
+        if(color1.equals(color2))
+            return true;
+        else
+            return false;
     }
 
     Canvas(){
         this.setPreferredSize(new Dimension(canvasSize,canvasSize));
-        newPixels();
+        this.setFocusable(true);
+        //this.addKeyListener(this);
         this.addMouseListener(this);
         this.addMouseMotionListener(this);
         this.addMouseWheelListener(this);
-        this.addKeyListener(this);
-        this.setFocusable(true);
+        newPixels();
+        History.init(gridSize);
 
     }
     public void newPixels(){
@@ -95,6 +120,24 @@ public class Canvas extends JPanel implements KeyListener,MouseListener, MouseMo
         revalidate();
         repaint();
     }
+    public void zoomIn(){
+        scale += 0.1;
+        resizeCanvas();
+    }
+    public void zoomOut(){
+        if(scale > 0.5){
+            scale -= 0.1;
+            resizeCanvas();
+        }
+    }
+    public void doUndo(){
+        History.undo(colors);
+        repaint();
+    }
+    public void doRedo(){
+        History.redo(colors);
+        repaint();
+    }
     
     
 
@@ -103,31 +146,6 @@ public class Canvas extends JPanel implements KeyListener,MouseListener, MouseMo
 
     public void setZoomListener(ZoomListener listener){
         zoomListener = listener;//frame
-    }
-
-    @Override
-    public void keyPressed(KeyEvent e){
-        if(e.getKeyCode()==KeyEvent.VK_EQUALS){ //for now press + for zoom in
-            scale+=0.1;
-            resizeCanvas();
-        }
-        
-        if(e.getKeyCode()==KeyEvent.VK_MINUS){ //and - for zoom out
-            if(scale>1){
-                scale-=0.1;
-                resizeCanvas();
-            }
-        }
-    }
-
-    @Override
-    public void keyReleased(KeyEvent e){
-        //idk
-    }
-
-    @Override
-    public void keyTyped(KeyEvent e){
-        //idk
     }
 
 	@Override
@@ -140,14 +158,18 @@ public class Canvas extends JPanel implements KeyListener,MouseListener, MouseMo
             return;
         //ColorPicker working
         if(checkPickerOn()){                                   
-                if(colors[x][y] == null){setCurrentColor(new Color(192, 192, 192));}
-                else{setCurrentColor(colors[x][y]);}
-                
+                if(colors[x][y] == null){
+                    setCurrentColor(new Color(192, 192, 192));
+                }
+                else{
+                    setCurrentColor(colors[x][y]);
+                }
                 setPickerOn();
         }
         //Fill Bucket working
         if(checkFillBucket()){
-            if(getCurrentColor().equals(colors[x][y])){return;}
+            if(getCurrentColor().equals(colors[x][y]))
+                return;
             else{
                 runFillBucket(x, y, colors[x][y]);
                 setFillBucket();
@@ -192,11 +214,12 @@ public class Canvas extends JPanel implements KeyListener,MouseListener, MouseMo
     }
 	@Override
 	public void mouseMoved(MouseEvent e) {         
-        }
+    }    
     
 	
 	@Override
 	public void mousePressed(MouseEvent e) {
+        History.canvasGonnaChange(colors);
 	}
 	@Override
 	public void mouseReleased(MouseEvent e) {

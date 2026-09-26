@@ -1,5 +1,8 @@
 import javax.swing.*;
 import java.awt.BorderLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
 
 public class Frame extends JFrame implements ZoomListener{
 
@@ -21,9 +24,6 @@ public class Frame extends JFrame implements ZoomListener{
         scrollpane = new JScrollPane(canvas);
         this.add(scrollpane);   
 
-        canvas.setZoomListener(this);
-
-
         Statusbar statusbar = new Statusbar(canvas);
         this.add(statusbar, BorderLayout.SOUTH);
         
@@ -32,10 +32,66 @@ public class Frame extends JFrame implements ZoomListener{
 
         Sidebar sidebar = new Sidebar(canvas);
         this.add(sidebar,BorderLayout.WEST);
-       
+
+        canvas.setZoomListener(this);
+        setupKeyBindings();
+
 
         this.setVisible(true);
+    }
+    void setupKeyBindings(){
         
+        //ctrl +  zoom in
+        KeyBindings.bind(
+                canvas,
+                KeyEvent.VK_EQUALS,InputEvent.CTRL_DOWN_MASK,
+                "zoomIn",
+                new AbstractAction(){
+                    @Override 
+                    public void actionPerformed(ActionEvent e){
+                        canvas.zoomIn();
+                    }
+                }
+        );
+        //ctrl -  zoom out
+        KeyBindings.bind(
+                canvas,
+                KeyEvent.VK_MINUS,InputEvent.CTRL_DOWN_MASK,
+                "zoomOut",
+                new AbstractAction(){
+                    @Override 
+                    public void actionPerformed(ActionEvent e){
+                        canvas.zoomOut();
+                    }
+                }
+        );
+
+        //ctrl z - undo
+        KeyBindings.bind(
+                canvas,
+                KeyEvent.VK_Z,InputEvent.CTRL_DOWN_MASK,
+                "undo",
+                new AbstractAction(){
+                    @Override 
+                    public void actionPerformed(ActionEvent e){
+                        //undo
+                        canvas.doUndo();
+                    }
+                }
+        );
+        //ctrl y - redo
+        KeyBindings.bind(
+                canvas,
+                KeyEvent.VK_Y,InputEvent.CTRL_DOWN_MASK,
+                "redo",
+                new AbstractAction(){
+                    @Override 
+                    public void actionPerformed(ActionEvent e){
+                        //redo
+                        canvas.doRedo();
+                    }
+                }
+        );
 
     }
     @Override

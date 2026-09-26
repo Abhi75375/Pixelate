@@ -17,7 +17,7 @@ public class Canvas extends JPanel implements KeyListener,MouseListener, MouseMo
 
     ZoomListener zoomListener;
 //Color
-    Color currentColor = Color.black;   
+    Color currentColor = new Color(0,0,0);   
     public void setCurrentColor(Color color){currentColor = color;}
     public Color getCurrentColor(){return currentColor;}
 //ColorPicker

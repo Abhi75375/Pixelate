@@ -7,6 +7,10 @@ public class History{
         size = s;
         undoHist = new Color[20][size][size];
         redoHist = new Color[20][size][size];
+        uf = -1;
+        ur = -1;
+        rf = -1;
+        rr = -1;
     }
     public static void canvasGonnaChange(Color[][] colors){
         push(1,colors);

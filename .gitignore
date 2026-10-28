@@ -1,2 +1,2 @@
-LICENSE
-.vscode/
+*.class
+*.log
